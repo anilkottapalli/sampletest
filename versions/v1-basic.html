@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tic-Tac-Toe V1 Basic</title>
+    <link rel="stylesheet" href="../assets/styles.css" />
+  </head>
+  <body>
+    <main class="container game-shell">
+      <h1>Tic-Tac-Toe V1 — Basic</h1>
+      <p id="status">Turn: X</p>
+      <section class="board" id="board"></section>
+      <div class="row">
+        <button id="restart">Restart</button>
+        <a class="back" href="../index.html">Back</a>
+      </div>
+    </main>
+
+    <script type="module">
+      import { winnerOf } from '../assets/game-core.js';
+
+      const board = Array(9).fill('');
+      let current = 'X';
+      let done = false;
+
+      const boardEl = document.getElementById('board');
+      const statusEl = document.getElementById('status');
+      const restartEl = document.getElementById('restart');
+
+      function draw() {
+        boardEl.innerHTML = '';
+        board.forEach((value, idx) => {
+          const btn = document.createElement('button');
+          btn.className = 'cell';
+          btn.textContent = value;
+          btn.disabled = Boolean(value) || done;
+          btn.addEventListener('click', () => move(idx));
+          boardEl.appendChild(btn);
+        });
+      }
+
+      function move(idx) {
+        if (board[idx] || done) return;
+        board[idx] = current;
+        const result = winnerOf(board);
+        if (result) {
+          done = true;
+          statusEl.textContent = result === 'Tie' ? 'Result: Tie' : `Winner: ${result}`;
+        } else {
+          current = current === 'X' ? 'O' : 'X';
+          statusEl.textContent = `Turn: ${current}`;
+        }
+        draw();
+      }
+
+      restartEl.addEventListener('click', () => {
+        board.fill('');
+        current = 'X';
+        done = false;
+        statusEl.textContent = 'Turn: X';
+        draw();
+      });
+
+      draw();
+    </script>
+  </body>
+</html>
