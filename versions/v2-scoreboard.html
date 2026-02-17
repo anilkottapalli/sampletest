@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tic-Tac-Toe V2 Scoreboard</title>
+    <link rel="stylesheet" href="../assets/styles.css" />
+  </head>
+  <body>
+    <main class="container game-shell">
+      <h1>Tic-Tac-Toe V2 — Scoreboard</h1>
+      <p id="status">Turn: X</p>
+      <div class="stats">
+        <strong>X: <span id="xWins">0</span></strong>
+        <strong>O: <span id="oWins">0</span></strong>
+        <strong>Ties: <span id="ties">0</span></strong>
+      </div>
+      <section class="board" id="board"></section>
+      <div class="row">
+        <button id="nextRound">Next round</button>
+        <button id="resetScore">Reset score</button>
+        <a class="back" href="../index.html">Back</a>
+      </div>
+    </main>
+
+    <script type="module">
+      import { winnerOf } from '../assets/game-core.js';
+
+      const board = Array(9).fill('');
+      let current = 'X';
+      let done = false;
+      const score = { X: 0, O: 0, Tie: 0 };
+
+      const boardEl = document.getElementById('board');
+      const statusEl = document.getElementById('status');
+      const xWinsEl = document.getElementById('xWins');
+      const oWinsEl = document.getElementById('oWins');
+      const tiesEl = document.getElementById('ties');
+      const nextRoundEl = document.getElementById('nextRound');
+      const resetScoreEl = document.getElementById('resetScore');
+
+      function renderScore() {
+        xWinsEl.textContent = score.X;
+        oWinsEl.textContent = score.O;
+        tiesEl.textContent = score.Tie;
+      }
+
+      function draw() {
+        boardEl.innerHTML = '';
+        board.forEach((value, idx) => {
+          const btn = document.createElement('button');
+          btn.className = 'cell';
+          btn.textContent = value;
+          btn.disabled = Boolean(value) || done;
+          btn.addEventListener('click', () => move(idx));
+          boardEl.appendChild(btn);
+        });
+      }
+
+      function move(idx) {
+        if (board[idx] || done) return;
+        board[idx] = current;
+        const result = winnerOf(board);
+        if (result) {
+          done = true;
+          score[result] += 1;
+          renderScore();
+          statusEl.textContent = result === 'Tie' ? 'Round tied' : `Round winner: ${result}`;
+        } else {
+          current = current === 'X' ? 'O' : 'X';
+          statusEl.textContent = `Turn: ${current}`;
+        }
+        draw();
+      }
+
+      function clearRound() {
+        board.fill('');
+        current = 'X';
+        done = false;
+        statusEl.textContent = 'Turn: X';
+        draw();
+      }
+
+      nextRoundEl.addEventListener('click', clearRound);
+      resetScoreEl.addEventListener('click', () => {
+        score.X = 0;
+        score.O = 0;
+        score.Tie = 0;
+        renderScore();
+        clearRound();
+      });
+
+      renderScore();
+      draw();
+    </script>
+  </body>
+</html>

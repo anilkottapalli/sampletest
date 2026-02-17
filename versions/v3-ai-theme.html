@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tic-Tac-Toe V3 AI Theme</title>
+    <link rel="stylesheet" href="../assets/styles.css" />
+  </head>
+  <body>
+    <main class="container game-shell" id="appRoot">
+      <h1>Tic-Tac-Toe V3 — AI + Theme</h1>
+      <div class="row">
+        <label>
+          Difficulty:
+          <select id="difficulty">
+            <option value="easy">Easy (Random)</option>
+            <option value="hard">Hard (Minimax)</option>
+          </select>
+        </label>
+        <button id="toggleTheme">Toggle Theme</button>
+      </div>
+
+      <p id="status">Your turn (X)</p>
+      <div class="stats">
+        <strong>You: <span id="xWins">0</span></strong>
+        <strong>AI: <span id="oWins">0</span></strong>
+        <strong>Ties: <span id="ties">0</span></strong>
+      </div>
+      <section class="board" id="board"></section>
+      <div class="row">
+        <button id="newRound">New round</button>
+        <button id="resetAll">Reset all</button>
+        <a class="back" href="../index.html">Back</a>
+      </div>
+    </main>
+
+    <script type="module">
+      import { availableMoves, winnerOf } from '../assets/game-core.js';
+
+      const HUMAN = 'X';
+      const AI = 'O';
+      const board = Array(9).fill('');
+      const score = { X: 0, O: 0, Tie: 0 };
+      let done = false;
+
+      const boardEl = document.getElementById('board');
+      const statusEl = document.getElementById('status');
+      const difficultyEl = document.getElementById('difficulty');
+      const toggleThemeEl = document.getElementById('toggleTheme');
+      const xWinsEl = document.getElementById('xWins');
+      const oWinsEl = document.getElementById('oWins');
+      const tiesEl = document.getElementById('ties');
+      const newRoundEl = document.getElementById('newRound');
+      const resetAllEl = document.getElementById('resetAll');
+
+      function renderScore() {
+        xWinsEl.textContent = score.X;
+        oWinsEl.textContent = score.O;
+        tiesEl.textContent = score.Tie;
+      }
+
+      function draw() {
+        boardEl.innerHTML = '';
+        board.forEach((value, idx) => {
+          const btn = document.createElement('button');
+          btn.className = 'cell';
+          btn.textContent = value;
+          btn.disabled = Boolean(value) || done;
+          btn.addEventListener('click', () => humanMove(idx));
+          boardEl.appendChild(btn);
+        });
+      }
+
+      function closeRound(result) {
+        done = true;
+        score[result] += 1;
+        renderScore();
+        statusEl.textContent = result === 'Tie' ? 'Round tied' : result === HUMAN ? 'You won!' : 'AI won';
+      }
+
+      function humanMove(idx) {
+        if (done || board[idx]) return;
+        board[idx] = HUMAN;
+        let result = winnerOf(board);
+        if (result) {
+          closeRound(result);
+          draw();
+          return;
+        }
+
+        statusEl.textContent = 'AI thinking...';
+        draw();
+        setTimeout(() => {
+          const move = chooseAiMove();
+          if (move !== null) board[move] = AI;
+          result = winnerOf(board);
+          if (result) {
+            closeRound(result);
+          } else {
+            statusEl.textContent = 'Your turn (X)';
+          }
+          draw();
+        }, 220);
+      }
+
+      function chooseAiMove() {
+        const moves = availableMoves(board);
+        if (!moves.length) return null;
+        if (difficultyEl.value === 'easy') {
+          return moves[Math.floor(Math.random() * moves.length)];
+        }
+        return minimax(board.slice(), AI).index;
+      }
+
+      function minimax(state, player) {
+        const result = winnerOf(state);
+        if (result === HUMAN) return { score: -10 };
+        if (result === AI) return { score: 10 };
+        if (result === 'Tie') return { score: 0 };
+
+        const moves = [];
+        for (const idx of availableMoves(state)) {
+          const move = { index: idx };
+          state[idx] = player;
+          move.score = minimax(state, player === AI ? HUMAN : AI).score;
+          state[idx] = '';
+          moves.push(move);
+        }
+
+        let bestMove = 0;
+        if (player === AI) {
+          let bestScore = -Infinity;
+          moves.forEach((move, idx) => {
+            if (move.score > bestScore) {
+              bestScore = move.score;
+              bestMove = idx;
+            }
+          });
+        } else {
+          let bestScore = Infinity;
+          moves.forEach((move, idx) => {
+            if (move.score < bestScore) {
+              bestScore = move.score;
+              bestMove = idx;
+            }
+          });
+        }
+        return moves[bestMove];
+      }
+
+      function clearRound() {
+        board.fill('');
+        done = false;
+        statusEl.textContent = 'Your turn (X)';
+        draw();
+      }
+
+      toggleThemeEl.addEventListener('click', () => {
+        document.body.classList.toggle('dark');
+      });
+
+      newRoundEl.addEventListener('click', clearRound);
+      resetAllEl.addEventListener('click', () => {
+        score.X = 0;
+        score.O = 0;
+        score.Tie = 0;
+        renderScore();
+        clearRound();
+      });
+
+      renderScore();
+      draw();
+    </script>
+  </body>
+</html>
