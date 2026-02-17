@@ -1,0 +1,52 @@
+:root {
+  font-family: Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: #f4f4f6;
+}
+
+.app {
+  text-align: center;
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.board {
+  margin: 1rem auto;
+  display: grid;
+  grid-template-columns: repeat(3, 80px);
+  gap: 8px;
+}
+
+.cell {
+  width: 80px;
+  height: 80px;
+  border: 0;
+  border-radius: 10px;
+  font-size: 2rem;
+  font-weight: bold;
+  background: #ececf1;
+  cursor: pointer;
+}
+
+.cell:disabled {
+  cursor: default;
+  opacity: 0.85;
+}
+
+button#reset {
+  border: 0;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  background: #3b82f6;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+}

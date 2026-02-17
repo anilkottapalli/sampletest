@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tic Tac Toe v3</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app">
+    <header class="header-row">
+      <h1>Tic Tac Toe v3</h1>
+      <button id="theme-toggle">Toggle theme</button>
+    </header>
+
+    <section class="toolbar">
+      <label for="mode">Mode:</label>
+      <select id="mode">
+        <option value="human">Human vs Human</option>
+        <option value="ai">Human vs AI (Unbeatable)</option>
+      </select>
+      <button id="new-round">New round</button>
+    </section>
+
+    <p id="status">Turn: X</p>
+
+    <div class="layout">
+      <div id="board" class="board" aria-label="Tic Tac Toe board"></div>
+      <aside>
+        <h2>Moves</h2>
+        <ol id="history"></ol>
+      </aside>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
