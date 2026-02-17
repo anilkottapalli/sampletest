@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tic-Tac-Toe v2 (Scoreboard)</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="container">
+    <div class="page-actions">
+      <a href="index.html"><button>← Back to versions</button></a>
+      <button id="next" class="primary">Next round</button>
+      <button id="clear">Clear scores</button>
+    </div>
+    <h1>Version 2: Scoreboard + Match History</h1>
+
+    <div class="game-layout">
+      <div>
+        <p id="status">Current turn: X</p>
+        <div class="board" id="board"></div>
+      </div>
+
+      <aside class="panel">
+        <h3>Scoreboard</h3>
+        <p>X Wins: <strong id="xscore">0</strong></p>
+        <p>O Wins: <strong id="oscore">0</strong></p>
+        <p>Draws: <strong id="dscore">0</strong></p>
+        <h3>Round history</h3>
+        <ol id="history" class="list"></ol>
+      </aside>
+    </div>
+  </main>
+  <script src="v2-scoreboard.js"></script>
+</body>
+</html>
