@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tic-Tac-Toe v2 (Enhanced)</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app">
+      <h1>Tic-Tac-Toe v2: Enhanced</h1>
+      <p id="status">Current player: X</p>
+      <section class="scoreboard">
+        <span id="xScore">X: 0</span>
+        <span id="oScore">O: 0</span>
+        <span id="drawScore">Draws: 0</span>
+      </section>
+      <div id="board" class="board" role="grid" aria-label="Tic tac toe board"></div>
+      <div class="actions">
+        <button id="undoBtn">Undo Last Move</button>
+        <button id="restartBtn">Restart Round</button>
+        <button id="resetAllBtn">Reset All Scores</button>
+      </div>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
